@@ -11,6 +11,7 @@ class leitorTexto(object):
 
             abreChaves = fechaChaves = countChaves = 0
             estados = []
+            estadosFinais = []
             alfabeto = []
             while (countChaves < 6):
 
@@ -45,14 +46,18 @@ class leitorTexto(object):
                     # Percorre todas as transicoes e coloca na matriz
                     for i in range(len(listaTransicoes)):
                         t = listaTransicoes[i].split('->')
-                        indexEstadoIda = estados.index(t[0])
-                        # Checa se a transicao vai pra um estado existente
-                        if len(t[1]) == 2:
-                            indexAlfabeto = alfabeto.index(t[1][0])
-                            afn[indexEstadoIda][indexAlfabeto] = t[1][1]
+                        # Verifica se e' estado final - possui lambda
+                        if t[1] == '\xce\xbb':
+                            estadosFinais.append(t[0])
                         else:
-                            indexAlfabeto = alfabeto.index(t[1])
-                            afn[indexEstadoIda][indexAlfabeto] += ',Z'
+                            indexEstadoIda = estados.index(t[0])
+                            # Checa se a transicao vai pra um estado existente
+                            if len(t[1]) == 2:
+                                indexAlfabeto = alfabeto.index(t[1][0])
+                                afn[indexEstadoIda][indexAlfabeto] = t[1][1]
+                            else:
+                                indexAlfabeto = alfabeto.index(t[1])
+                                afn[indexEstadoIda][indexAlfabeto] += ',Z'
 
                 abreChaves += 1
                 fechaChaves += 1

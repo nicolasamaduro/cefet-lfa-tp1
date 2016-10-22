@@ -1,0 +1,8 @@
+1) Exemplo do enunciado da pratica
+G = ({A, B}, {0, 1}, {A -> 0A, A -> 1B, A -> 0, B -> 1B, B -> λ}, A)
+
+2)
+G = ({A, B, C, D, E}, {0, 1}, {A -> 0B, B -> 0C, C -> 1D, D -> 1E, D -> 1C, E -> λ}, A, B)
+
+3)
+G = ({A, B, C, D}, {0, 1}, {A -> 0A, A -> 1A, A -> 0B, B -> 0C, B -> 1C, C -> 0D, C -> 1D, D -> λ}, A)

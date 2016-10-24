@@ -2,25 +2,29 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import threading
+import atexit
 from leitorTexto import leitorTexto
-from afn_to_afd import afn_to_afd
+from AFN import AFN
+from AFD import AFD
 
 if len(sys.argv) == 1:
 	print 'Usar: verificador [GR de entrada]'
 else:
 	lt = leitorTexto(sys.argv[1])
-	estadosAFN, alfabeto, estadosIniciaisAFN, estadosFinaisAFN, afn = lt.getGR()
+	afn = lt.getAFN()
 
-	print '**** AFN ****'
-	print 'estados: ',estadosAFN
-	print 'estadosIniciais: ',estadosIniciaisAFN
-	print 'estadosFinais: ',estadosFinaisAFN
-	print 'afn: ',afn,'\n'
+	afn.toAFD()
+	afd = afn.afd
+	palavra=""
 
-	estadosAFD, estadoInicialAFD, estadosFinaisAFD, afd = afn_to_afd(estadosAFN, alfabeto, estadosIniciaisAFN, estadosFinaisAFN, afn)
+	while True:
+		try:
+			palavra = raw_input()
+		except EOFError:
+			sys.exit(0)
+		if afd.verificaPalavra(palavra):
+			print "Sim"
+		else:
+			print "Não"
 
-	print '**** AFD ****'
-	print 'estados: ',estadosAFD
-	print 'estadoInicial: ',estadoInicialAFD
-	print 'estadosFinais: ',estadosFinaisAFD
-	print 'afd: ',afd

@@ -1,4 +1,5 @@
 import re
+from AFN import AFN
 
 class leitorTexto(object):
     """ Le a gramatica em um arquivo passado como argumento
@@ -7,15 +8,14 @@ class leitorTexto(object):
     def __init__(self, str):
         self.str = str
 
-    def getGR(self):
+    def getAFN(self):
         with open(self.str, 'r') as file:
             gr = file.read()
 
+            afn = AFN()
+
             abreChaves = fechaChaves = countChaves = 0
-            estados = []
-            estadosIniciais = []
-            estadosFinais = []
-            alfabeto = []
+
 
             # Percorre a gramatica retirando informacoes            
             while (countChaves < 6):
@@ -31,23 +31,24 @@ class leitorTexto(object):
                         # Pega os estados e coloca em uma lista
                         if countChaves == 0:
                             if gr[i].isalpha():
-                                estados.append(gr[i])
+
+                                afn.estados.append(gr[i])
 
                         # Pega os elementos do alfabeto e coloca em uma lista
                         elif countChaves == 2:
                             if gr[i].isdigit():
-                                alfabeto.append(gr[i])
+                                afn.alfabeto.append(gr[i])
 
                 # Pega os estadosIniciais e Trata as transicoes prenchendo uma matriz afn
                 else:
                     # Pega os estadosIniciais
                     for i in range(fechaChaves,len(gr)):
                         if gr[i].isalpha():
-                            estadosIniciais.append(gr[i])
+                            afn.estadosIniciais.append(gr[i])
 
                     # Trata as transicoes prenchendo uma matriz afn
                     # Cria matriz afn com o caracter '-'
-                    afn = [['-' for i in range(len(alfabeto))] for j in range(len(estados))]
+                    afn.transicoes = [['-' for i in range(len(afn.alfabeto))] for j in range(len(afn.estados))]
                     # Substring de gr apenas com as transicoes
                     auxGr = gr[abreChaves + 1:fechaChaves]
                     # Retira os espacos
@@ -59,29 +60,32 @@ class leitorTexto(object):
                         t = listaTransicoes[i].split('->')
                         # Verifica se e' estado final - possui lambda
                         if t[1] == '\xce\xbb':
-                            estadosFinais.append(t[0])
+                            afn.estadosFinais.append(t[0])
                         else:
-                            indexEstadoIda = estados.index(t[0])
+                            indexEstadoIda = afn.estados.index(t[0])
                             # Checa se a transicao vai pra um estado existente
-                            if len(t[1]) == 2:
-                                indexAlfabeto = alfabeto.index(t[1][0])
+
+                            indexAlfabeto = afn.alfabeto.index(t[1][0])
+                            if len(t[1]) == 1:
+                                if t[1] not in afn.estados:
+                                    afn.estadosFinais.append(t[1][0])
+                                    afn.estados.append(t[1][0])
+                                    afn.transicoes.append(['-','-'])
                                 # Checa se a transicao ja esta indo para outro estado
-                                if afn[indexEstadoIda][indexAlfabeto] != '-':
-                                    afn[indexEstadoIda][indexAlfabeto] += ','+t[1][1]
+                                if afn.transicoes[indexEstadoIda][indexAlfabeto] != '-':
+                                    afn.transicoes[indexEstadoIda][indexAlfabeto] += ',' + t[1][0]
                                 else:
-                                    afn[indexEstadoIda][indexAlfabeto] = t[1][1]
+                                    afn.transicoes[indexEstadoIda][indexAlfabeto] = t[1][0]
                             else:
-                                indexAlfabeto = alfabeto.index(t[1])
                                 # Checa se a transicao ja esta indo para outro estado
-                                if afn[indexEstadoIda][indexAlfabeto] == '-':
-                                    afn[indexEstadoIda][indexAlfabeto] = 'Z'
-                                # Checa se 'Z' ja esta em estadosFinais
-                                if 'Z' not in estadosFinais:
-                                    estadosFinais.append('Z')
+                                if afn.transicoes[indexEstadoIda][indexAlfabeto] != '-':
+                                    afn.transicoes[indexEstadoIda][indexAlfabeto] += ','+t[1][1]
+                                else:
+                                    afn.transicoes[indexEstadoIda][indexAlfabeto] = t[1][1]
 
 
                 abreChaves += 1
                 fechaChaves += 1
                 countChaves += 2
 
-        return estados, alfabeto, estadosIniciais, estadosFinais, afn
+        return afn

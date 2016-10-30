@@ -10,7 +10,10 @@ class AFD(AF):
         indexAlfabeto=0
         for digito in palavra:
             if digito=='#':
-                break
+                if len(palavra)==1:
+                    break
+                else:
+                    return False
             if not (digito in self.alfabeto):
                 return False
             else:

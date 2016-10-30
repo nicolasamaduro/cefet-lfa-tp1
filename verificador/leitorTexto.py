@@ -98,5 +98,4 @@ class leitorTexto(object):
                 abreChaves += 1
                 fechaChaves += 1
                 countChaves += 2
-
         return afn

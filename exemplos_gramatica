@@ -1,5 +1,5 @@
 1) Exemplo do enunciado da pratica
-G = ({Aa, B}, {0, 1}, {Aa -> 0Aa, A -> 1B, Aa -> 0, B -> 1B, B -> #}, A)
+G = ({Aa, B}, {0, 1}, {Aa -> 0Aa, Aa -> 1B, Aa -> 0, B -> 1B, B -> #}, Aa)
 
 2)
 G = ({A, B, C, D, E}, {0, 1}, {A -> 0B, B -> 0C, C -> 1D, D -> 1E, D -> 1C, E -> #}, A, B)

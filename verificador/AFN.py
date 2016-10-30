@@ -1,7 +1,7 @@
-from AutomatoFormal import AutomatoFormal
+from AF import AF
 from AFD import AFD
 
-class AFN(AutomatoFormal):
+class AFN(AF):
     def __init__(self):
         super(AFN,self).__init__()
 

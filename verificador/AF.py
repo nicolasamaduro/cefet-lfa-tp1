@@ -1,4 +1,4 @@
-class AutomatoFormal(object):
+class AF(object):
 
     def __init__(self):
         self.alfabeto=[]

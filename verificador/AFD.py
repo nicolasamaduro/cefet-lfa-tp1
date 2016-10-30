@@ -5,10 +5,12 @@ class AFD(AutomatoFormal):
         super(AFD, self).__init__()
 
     def verificaPalavra(self, palavra):
-        estadoAtual=self.estadosIniciais
+        estadoAtual=self.estadosIniciais[0]
         indexEstado=0
         indexAlfabeto=0
         for digito in palavra:
+            if digito=='#':
+                break
             if not (digito in self.alfabeto):
                 return False
             else:

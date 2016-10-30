@@ -11,9 +11,8 @@ class leitorTexto(object):
     def getAFN(self):
         with open(self.str, 'r') as file:
             gr = file.read()
-
+            gr=gr.replace("\n","")
             afn = AFN()
-
             abreChaves = fechaChaves = countChaves = 0
 
 
@@ -27,25 +26,38 @@ class leitorTexto(object):
                 # Trata  os estados e o alfabeto colocando ambos
                 # em uma lista separada
                 if countChaves <= 2:
-                    for i in range(abreChaves + 1, fechaChaves):
+                    i = abreChaves + 1
+                    while i<fechaChaves:
                         # Pega os estados e coloca em uma lista
                         if countChaves == 0:
-                            if gr[i].isalpha():
-
-                                afn.estados.append(gr[i])
-
+                            aux=""
+                            entrou=0
+                            while gr[i].isalpha():
+                                aux = aux + gr[i]
+                                i=i+1
+                                entrou=1
+                            if(entrou==1):
+                                afn.estados.append(aux)
                         # Pega os elementos do alfabeto e coloca em uma lista
                         elif countChaves == 2:
-                            if gr[i].isdigit():
+                            if gr[i].isalnum():
                                 afn.alfabeto.append(gr[i])
+                        i=i+1
 
                 # Pega os estadosIniciais e Trata as transicoes prenchendo uma matriz afn
                 else:
                     # Pega os estadosIniciais
-                    for i in range(fechaChaves,len(gr)):
-                        if gr[i].isalpha():
-                            afn.estadosIniciais.append(gr[i])
-
+                    i=fechaChaves
+                    while i<len(gr):
+                        aux = ""
+                        entrou = 0
+                        while gr[i].isalpha():
+                            aux = aux + gr[i]
+                            i = i + 1
+                            entrou = 1
+                        if (entrou == 1):
+                            afn.estadosIniciais.append(aux)
+                        i=i+1
                     # Trata as transicoes prenchendo uma matriz afn
                     # Cria matriz afn com o caracter '-'
                     afn.transicoes = [['-' for i in range(len(afn.alfabeto))] for j in range(len(afn.estados))]
@@ -59,12 +71,11 @@ class leitorTexto(object):
                     for i in range(len(listaTransicoes)):
                         t = listaTransicoes[i].split('->')
                         # Verifica se e' estado final - possui lambda
-                        if t[1] == '\xce\xbb':
+                        if t[1] == '#':
                             afn.estadosFinais.append(t[0])
                         else:
                             indexEstadoIda = afn.estados.index(t[0])
                             # Checa se a transicao vai pra um estado existente
-
                             indexAlfabeto = afn.alfabeto.index(t[1][0])
                             if len(t[1]) == 1:
                                 if t[1] not in afn.estados:
@@ -78,11 +89,11 @@ class leitorTexto(object):
                                     afn.transicoes[indexEstadoIda][indexAlfabeto] = t[1][0]
                             else:
                                 # Checa se a transicao ja esta indo para outro estado
+                                estado=t[1][1:len(t[1])]
                                 if afn.transicoes[indexEstadoIda][indexAlfabeto] != '-':
-                                    afn.transicoes[indexEstadoIda][indexAlfabeto] += ','+t[1][1]
+                                    afn.transicoes[indexEstadoIda][indexAlfabeto] += ','+estado
                                 else:
-                                    afn.transicoes[indexEstadoIda][indexAlfabeto] = t[1][1]
-
+                                    afn.transicoes[indexEstadoIda][indexAlfabeto] = estado
 
                 abreChaves += 1
                 fechaChaves += 1

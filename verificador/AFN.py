@@ -38,7 +38,9 @@ class AFN(AutomatoFormal):
 
             # Percorre cada estado em estadosAFD e preenche o afd
             # com as respectivas transicoes
-            for e in self.afd.estados[cont]:
+            estados = self.afd.estados[cont].split(',')
+
+            for e in estados:
                 if e != ',':
                     indexEstado = self.estados.index(e)
                     for a in self.alfabeto:

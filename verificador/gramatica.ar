@@ -1,1 +1,1 @@
-G = ({A, B, C, D, E}, {0, 1}, {A -> 0B, B -> 0C, C -> 1D, D -> 1E, D -> 1C, E -> λ}, A, B)
+({A,B,C},{a,b,c},{A->aB, A->bA, A->cA, B->aB, B->bC, B->cA, C->aB, C->bA, A->#, B->#, C->#},A)

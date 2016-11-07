@@ -23,6 +23,8 @@ else:
 			palavra = raw_input()
 		except EOFError:
 			sys.exit(0)
+		if len(palavra) == 0:
+			sys.exit(0)
 		if afd.verificaPalavra(palavra):
 			print "Sim"
 		else:
